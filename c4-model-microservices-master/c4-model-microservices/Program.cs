@@ -17,7 +17,7 @@ namespace c4_model_microservices
             const string apiSecret = "";
 
             StructurizrClient structurizrClient = new StructurizrClient(apiKey, apiSecret);
-            Workspace workspace = new Workspace("C4 Model Microservices - Sistema de Monitoreoo", "Sistema de Monitoreo del Traslado Aéreo de Vacunas SARS-CoV-2");
+            Workspace workspace = new Workspace("C4 Model Microservices - Sistema de Monitoreo", "Sistema de Monitoreo del Traslado Aéreo de Vacunas SARS-CoV-2");
             Model model = workspace.Model;
             ViewSet viewSet = workspace.Views;
 
