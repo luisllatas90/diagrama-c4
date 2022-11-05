@@ -14,12 +14,12 @@ namespace c4_model_microservices
 
         static void Banking()
         {
-            const long workspaceId = 0;
+            const long workspaceId = 78136;
             const string apiKey = "66bb7aaf-2d15-49a3-83fb-dd535af060cf"; 
             const string apiSecret = "839c1914-5137-40cc-95d3-5bb9aaae7bdd";
 
             StructurizrClient structurizrClient = new StructurizrClient(apiKey, apiSecret);
-            Workspace workspace = new Workspace("C4 Model Microservices - Sistema de Monitoreooo", "Sistema de Monitoreo del Traslado Aéreo de Vacunas SARS-CoV-2");
+            Workspace workspace = new Workspace("C4 Model Microservices - InventApp", "Sistema de Gestión de Inventario para Restaurante");
             Model model = workspace.Model;
             ViewSet viewSet = workspace.Views;
 
