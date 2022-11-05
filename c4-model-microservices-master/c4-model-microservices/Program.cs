@@ -8,16 +8,18 @@ namespace c4_model_microservices
         static void Main(string[] args)
         {
             Banking();
+            //URL DE DIAGRAMA PÚBLICO EN STRUCTURIZR (workspace: 78136 creado en la web de structurizt) =>
+            // https://structurizr.com/share/78136
         }
 
         static void Banking()
         {
             const long workspaceId = 0;
-            const string apiKey = "";
-            const string apiSecret = "";
+            const string apiKey = "66bb7aaf-2d15-49a3-83fb-dd535af060cf"; 
+            const string apiSecret = "839c1914-5137-40cc-95d3-5bb9aaae7bdd";
 
             StructurizrClient structurizrClient = new StructurizrClient(apiKey, apiSecret);
-            Workspace workspace = new Workspace("C4 Model Microservices - Sistema de Monitoreo", "Sistema de Monitoreo del Traslado Aéreo de Vacunas SARS-CoV-2");
+            Workspace workspace = new Workspace("C4 Model Microservices - Sistema de Monitoreooo", "Sistema de Monitoreo del Traslado Aéreo de Vacunas SARS-CoV-2");
             Model model = workspace.Model;
             ViewSet viewSet = workspace.Views;
 
