@@ -7,12 +7,12 @@ namespace c4_model_microservices
     {
         static void Main(string[] args)
         {
-            Banking();
+            Inventario();
             //URL DE DIAGRAMA PÚBLICO EN STRUCTURIZR (workspace: 78136 creado en la web de structurizt) =>
             // https://structurizr.com/share/78136
         }
 
-        static void Banking()
+        static void Inventario()
         {
             const long workspaceId = 78136;
             const string apiKey = "66bb7aaf-2d15-49a3-83fb-dd535af060cf"; 
@@ -23,20 +23,21 @@ namespace c4_model_microservices
             Model model = workspace.Model;
             ViewSet viewSet = workspace.Views;
 
-            // 1. Diagrama de Contexto
-            SoftwareSystem monitoringSystem = model.AddSoftwareSystem("Monitoreo del Traslado Aéreo de Vacunas SARS-CoV-2", "Permite el seguimiento y monitoreo del traslado aéreo a nuestro país de las vacunas para la COVID-19.");
-            SoftwareSystem googleMaps = model.AddSoftwareSystem("Google Maps", "Plataforma que ofrece una REST API de información geo referencial.");
-            SoftwareSystem aircraftSystem = model.AddSoftwareSystem("Aircraft System", "Permite transmitir información en tiempo real por el avión del vuelo a nuestro sistema");
+            // 1. Diagrama de Contexto (CONFIGURACIÓN)
+            /*
+            SoftwareSystem monitoringSystem = model.AddSoftwareSystem("Configuración", "Permite realizar el registro de usuarios y asignar roles ");
+            //SoftwareSystem googleMaps = model.AddSoftwareSystem("Google Maps", "Plataforma que ofrece una REST API de información geo referencial.");
+            //SoftwareSystem aircraftSystem = model.AddSoftwareSystem("Aircraft System", "Permite transmitir información en tiempo real por el avión del vuelo a nuestro sistema");
 
-            Person ciudadano = model.AddPerson("Ciudadano", "Ciudadano peruano.");
-            Person periodista = model.AddPerson("Periodista", "Periodista de los diferentes medios de prensa.");
-            Person developer = model.AddPerson("Developer", "Developer - Open Data.");
+            Person administrador = model.AddPerson("Administrador", "Administrador del sistema.");
+            //Person periodista = model.AddPerson("Periodista", "Periodista de los diferentes medios de prensa.");
+            //Person developer = model.AddPerson("Developer", "Developer - Open Data.");
 
-            ciudadano.Uses(monitoringSystem, "Realiza consultas para mantenerse al tanto de la planificación de los vuelos hasta la llegada del lote de vacunas al Perú");
-            periodista.Uses(monitoringSystem, "Realiza consultas para mantenerse al tanto de la planificación de los vuelos hasta la llegada del lote de vacunas al Perú");
-            developer.Uses(monitoringSystem, "Realiza consultas a la REST API para mantenerse al tanto de la planificación de los vuelos hasta la llegada del lote de vacunas al Perú");
-            monitoringSystem.Uses(aircraftSystem, "Consulta información en tiempo real por el avión del vuelo");
-            monitoringSystem.Uses(googleMaps, "Usa");
+            administrador.Uses(monitoringSystem, "Realiza el registro de los nuevos usuarios que accederán al sistema de inventario");
+            //periodista.Uses(monitoringSystem, "Realiza consultas para mantenerse al tanto de la planificación de los vuelos hasta la llegada del lote de vacunas al Perú");
+            //developer.Uses(monitoringSystem, "Realiza consultas a la REST API para mantenerse al tanto de la planificación de los vuelos hasta la llegada del lote de vacunas al Perú");
+            //monitoringSystem.Uses(aircraftSystem, "Consulta información en tiempo real por el avión del vuelo");
+            //monitoringSystem.Uses(googleMaps, "Usa");
             
             SystemContextView contextView = viewSet.CreateSystemContextView(monitoringSystem, "Contexto", "Diagrama de contexto");
             contextView.PaperSize = PaperSize.A4_Landscape;
@@ -44,110 +45,285 @@ namespace c4_model_microservices
             contextView.AddAllPeople();
 
             // Tags
-            monitoringSystem.AddTags("SistemaMonitoreo");
-            googleMaps.AddTags("GoogleMaps");
-            aircraftSystem.AddTags("AircraftSystem");
-            ciudadano.AddTags("Ciudadano");
-            periodista.AddTags("Periodista");
-            developer.AddTags("Developer");
+            //monitoringSystem.AddTags("SistemaMonitoreo");
+            //oogleMaps.AddTags("GoogleMaps");
+            //aircraftSystem.AddTags("AircraftSystem");
+            administrador.AddTags("Administrador");
+            //periodista.AddTags("Periodista");
+            //developer.AddTags("Developer");
             
             Styles styles = viewSet.Configuration.Styles;
-            styles.Add(new ElementStyle("Ciudadano") { Background = "#0a60ff", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Administrador") { Background = "#0a60ff", Color = "#ffffff", Shape = Shape.Person });
+     
             styles.Add(new ElementStyle("Periodista") { Background = "#08427b", Color = "#ffffff", Shape = Shape.Person });
             styles.Add(new ElementStyle("Developer") { Background = "#facc2e", Shape = Shape.Robot });
             styles.Add(new ElementStyle("SistemaMonitoreo") { Background = "#008f39", Color = "#ffffff", Shape = Shape.RoundedBox });
             styles.Add(new ElementStyle("GoogleMaps") { Background = "#90714c", Color = "#ffffff", Shape = Shape.RoundedBox });
             styles.Add(new ElementStyle("AircraftSystem") { Background = "#2f95c7", Color = "#ffffff", Shape = Shape.RoundedBox });
+            */
+             // 1. Diagrama de Contexto (CONFIGURACIÓN)
+
+
+
+            // 2. Diagrama de Contexto (INVENTARIO)
+           /*
+            SoftwareSystem inventario = model.AddSoftwareSystem("Inventario", "Permite realizar el registro de ingredientes y platos ");
+            SoftwareSystem configuracion = model.AddSoftwareSystem("Configuración", "Sistema que gestiona usuarios que pueden acceder al sistema.");
+            SoftwareSystem stock = model.AddSoftwareSystem("Stock", "Sistema que almacenar datos de stock por cada ingrediente.");
+            SoftwareSystem ventas = model.AddSoftwareSystem("Ventas", "Sistema que gestiona las ventas.");
             
+
+            Person administrador = model.AddPerson("Administrador", "Administrador del sistema.");
+            Person cocinero = model.AddPerson("Cocinero", "Cocinero encargado de la preparación de los diferentes platos");
+            //Person developer = model.AddPerson("Developer", "Developer - Open Data.");
+
+            administrador.Uses(inventario, "Realizar el monitoreo de los platos e ingredientes registrados");
+            cocinero.Uses(inventario, "Realizar el registro de ingredientes y platos, según inventario");
+            inventario.Uses(configuracion, "Consulta qué usuarios pueden acceder al sistema");
+            inventario.Uses(stock, "Consulta stock de cada ingrediente");
+            ventas.Uses(inventario, "Realiza actualización de inventario en base a las ventas realizadas");
+            
+            SystemContextView contextView = viewSet.CreateSystemContextView(inventario, "Contexto", "Diagrama de contexto");
+            contextView.PaperSize = PaperSize.A4_Landscape;
+            contextView.AddAllSoftwareSystems();
+            contextView.AddAllPeople();
+
+            // Tags
+            inventario.AddTags("Inventario");
+            configuracion.AddTags("Configuracion");
+            stock.AddTags("Stock");
+            ventas.AddTags("Ventas");
+            administrador.AddTags("Administrador");
+            cocinero.AddTags("Cocinero");
+            
+            Styles styles = viewSet.Configuration.Styles;
+            styles.Add(new ElementStyle("Administrador") { Background = "#0a60ff", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Cocinero") { Background = "#08427b", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Stock") { Background = "#facc2e", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Ventas") { Background = "#008f39", Color = "#ffffff", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Inventario") { Background = "#90714c", Color = "#ffffff", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Configuracion") { Background = "#2f95c7", Color = "#ffffff", Shape = Shape.RoundedBox });
+            */
+            // -- 2. Diagrama de Contexto (INVENTARIO)
+            
+         
+
+
+            // 3. Diagrama de Contexto (STOCK)
+            /*
+            SoftwareSystem stock = model.AddSoftwareSystem("Stock", "Sistema que almacenar datos de stock por cada ingrediente.");
+            SoftwareSystem inventario = model.AddSoftwareSystem("Inventario", "Permite realizar el registro de ingredientes y platos ");
+            SoftwareSystem configuracion = model.AddSoftwareSystem("Configuración", "Sistema que gestiona usuarios que pueden acceder al sistema.");
+            SoftwareSystem ventas = model.AddSoftwareSystem("Ventas", "Sistema que gestiona las ventas.");
+            
+
+            Person administrador = model.AddPerson("Administrador", "Administrador del sistema.");
+            Person cocinero = model.AddPerson("Cocinero", "Cocinero encargado de la preparación de los diferentes platos");
+            //Person developer = model.AddPerson("Developer", "Developer - Open Data.");
+
+            administrador.Uses(stock, "Realizar el monitoreo de los platos e ingredientes registrados");
+            cocinero.Uses(stock, "Realizar el registro de ingredientes y platos, según inventario");
+            //developer.Uses(monitoringSystem, "Realiza consultas a la REST API para mantenerse al tanto de la planificación de los vuelos hasta la llegada del lote de vacunas al Perú");
+            configuracion.Uses(stock, "Brinda información sobre usuario que pueden acceder al sistema para modificar stock");
+            inventario.Uses(stock, "Consulta stock de ingrediente actualizado");
+            stock.Uses(ventas, "Almacena datos de stock actualizada de cada ingrediente");
+            
+            SystemContextView contextView = viewSet.CreateSystemContextView(stock, "Contexto", "Diagrama de contexto");
+            contextView.PaperSize = PaperSize.A4_Landscape;
+            contextView.AddAllSoftwareSystems();
+            contextView.AddAllPeople();
+
+            // Tags
+            inventario.AddTags("Inventario");
+            configuracion.AddTags("Configuracion");
+            stock.AddTags("Stock");
+            ventas.AddTags("Ventas");
+            administrador.AddTags("Administrador");
+            cocinero.AddTags("Cocinero");
+            
+            Styles styles = viewSet.Configuration.Styles;
+            styles.Add(new ElementStyle("Administrador") { Background = "#0a60ff", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Cocinero") { Background = "#08427b", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Stock") { Background = "#facc2e", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Ventas") { Background = "#008f39", Color = "#ffffff", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Inventario") { Background = "#90714c", Color = "#ffffff", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Configuracion") { Background = "#2f95c7", Color = "#ffffff", Shape = Shape.RoundedBox });
+            */
+            // -- 3. Diagrama de Contexto (STOCK)
+
+
+
+            // 4. Diagrama de Contexto (VENTAS)
+            /*
+            SoftwareSystem stock = model.AddSoftwareSystem("Stock", "Sistema que almacenar datos de stock por cada ingrediente.");
+            SoftwareSystem inventario = model.AddSoftwareSystem("Inventario", "Permite realizar el registro de ingredientes y platos ");
+            SoftwareSystem configuracion = model.AddSoftwareSystem("Configuración", "Sistema que gestiona usuarios que pueden acceder al sistema.");
+            SoftwareSystem ventas = model.AddSoftwareSystem("Ventas", "Sistema que gestiona las ventas.");
+            
+
+            Person administrador = model.AddPerson("Administrador", "Administrador del sistema.");
+            Person cajero = model.AddPerson("Cajero", "Cajero se encarga del registro y cobro de la venta");
+            
+            administrador.Uses(ventas, "Realizar el monitoreo de las ventas");
+            cajero.Uses(ventas, "Realizar el registro y cobro de las ventas");
+            ventas.Uses(configuracion, "Brinda información sobre usuario que pueden acceder al sistema para registrar venta");
+            stock.Uses(ventas, "Consulta datos y actualiza stock de ingredientes");
+            ventas.Uses(inventario, "Actualiza stock de ingrediente de venta realizada");
+            
+            SystemContextView contextView = viewSet.CreateSystemContextView(ventas, "Contexto", "Diagrama de contexto");
+            contextView.PaperSize = PaperSize.A4_Landscape;
+            contextView.AddAllSoftwareSystems();
+            contextView.AddAllPeople();
+
+            // Tags
+            inventario.AddTags("Inventario");
+            configuracion.AddTags("Configuracion");
+            stock.AddTags("Stock");
+            ventas.AddTags("Ventas");
+            administrador.AddTags("Administrador");
+            cajero.AddTags("Cajero");
+            
+            Styles styles = viewSet.Configuration.Styles;
+            styles.Add(new ElementStyle("Administrador") { Background = "#0a60ff", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Cajero") { Background = "#08427b", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Stock") { Background = "#facc2e", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Ventas") { Background = "#008f39", Color = "#ffffff", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Inventario") { Background = "#90714c", Color = "#ffffff", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Configuracion") { Background = "#2f95c7", Color = "#ffffff", Shape = Shape.RoundedBox });
+            */
+
+            // -- 3. Diagrama de Contexto (VENTAS)
+
+
+            /////////////////////////////
+            //DIAGRAMA DE CONTENEDORES
+            /////////////////////////////
+
             // 2. Diagrama de Contenedores
-            Container mobileApplication = monitoringSystem.AddContainer("Mobile App", "Permite a los usuarios visualizar un dashboard con el resumen de toda la información del traslado de los lotes de vacunas.", "Flutter");
-            Container webApplication = monitoringSystem.AddContainer("Web App", "Permite a los usuarios visualizar un dashboard con el resumen de toda la información del traslado de los lotes de vacunas.", "React");
-            Container landingPage = monitoringSystem.AddContainer("Landing Page", "", "React");
-            Container apiGateway = monitoringSystem.AddContainer("API Gateway Kong", "API Gateway", "Spring Boot port 8080");
-            Container flightPlanningContext = monitoringSystem.AddContainer("Flight Planning Context", "Bounded Context del Microservicio de Planificación de Vuelos", "Spring Boot port 8081");
-            Container airportContext = monitoringSystem.AddContainer("Airport Context", "Bounded Context del Microservicio de información de Aeropuertos", "Spring Boot port 8082");
-            Container aircraftInventoryContext = monitoringSystem.AddContainer("Aircraft Inventory Context", "Bounded Context del Microservicio de Inventario de Aviones", "Spring Boot port 8083");
-            Container vaccinesInventoryContext = monitoringSystem.AddContainer("Vaccines Inventory Context", "Bounded Context del Microservicio de Inventario de Vacunas", "Spring Boot port 8084");
-            Container monitoringContext = monitoringSystem.AddContainer("Monitoring Context", "Bounded Context del Microservicio de Monitoreo en tiempo real del status y ubicación del vuelo que transporta las vacunas", "Spring Boot port 8085");
-            Container messageBus =
-                monitoringSystem.AddContainer("Bus de Mensajes HA", "Transporte de eventos del dominio.", "RabbitMQ");
-            Container flightPlanningContextDatabase = monitoringSystem.AddContainer("Flight Planning Context DB", "", "Oracle");
-            Container airportContextDatabase = monitoringSystem.AddContainer("Airport Context DB", "", "Oracle");
-            Container aircraftInventoryContextDatabase = monitoringSystem.AddContainer("Aircraft Inventory Context DB", "", "Oracle");
-            Container vaccinesInventoryContextDatabase = monitoringSystem.AddContainer("Vaccines Inventory Context DB", "", "Oracle");
-            Container monitoringContextDatabase = monitoringSystem.AddContainer("Monitoring Context DB", "", "Oracle");
-            Container monitoringContextReplicaDatabase = monitoringSystem.AddContainer("Monitoring Context DB Replica", "", "Oracle");
-            Container monitoringContextReactiveDatabase = monitoringSystem.AddContainer("Monitoring Context Reactive DB", "", "Firebase Cloud Firestore");
+            SoftwareSystem SistemaGestionInventario = model.AddSoftwareSystem("Gestión Inventario", "Sistema de gestión de inventario.");
             
-            ciudadano.Uses(mobileApplication, "Consulta");
-            ciudadano.Uses(webApplication, "Consulta");
-            ciudadano.Uses(landingPage, "Consulta");
-            periodista.Uses(mobileApplication, "Consulta");
-            periodista.Uses(webApplication, "Consulta");
-            periodista.Uses(landingPage, "Consulta");
+            //SoftwareSystem stock = model.AddSoftwareSystem("Stock", "Sistema que almacenar datos de stock por cada ingrediente.");
+            //SoftwareSystem inventario = model.AddSoftwareSystem("Inventario", "Permite realizar el registro de ingredientes y platos ");
+            //SoftwareSystem configuracion = model.AddSoftwareSystem("Configuración", "Sistema que gestiona usuarios que pueden acceder al sistema.");
+            //SoftwareSystem ventas = model.AddSoftwareSystem("Ventas", "Sistema que gestiona las ventas.");
+            
+            //context - microservicios y aplicativos web y/o movil
+            Container mobileApplication = SistemaGestionInventario.AddContainer("Mobile App", "Permite a los usuarios realizar las operaciones de gestión de inventario", "Android");
+            Container webApplication = SistemaGestionInventario.AddContainer("Web App", "Permite a los usuarios realizar las operaciones de gestión de inventario y venta", "React");
+            Container apiGateway = SistemaGestionInventario.AddContainer("API Gateway", "API Gateway", "Spring Boot port 8080");
+            
+            Container configuracionContext = SistemaGestionInventario.AddContainer("Configuración Context", "Bounded Context del Microservicio de Configuración", "Spring Boot port 8081");
+            Container stockContext = SistemaGestionInventario.AddContainer("Stock Context", "Bounded Context del Microservicio de Stock", "Spring Boot port 8082");
+            Container inventarioContext = SistemaGestionInventario.AddContainer("Inventario Context", "Bounded Context del Microservicio de Inventario de Ingredientes", "Spring Boot port 8083");
+            Container ventasContext = SistemaGestionInventario.AddContainer("Ventas Context", "Bounded Context del Microservicio de Inventario de Ventas", "Spring Boot port 8084");
+            
+            //context - bd
+            Container messageBus = SistemaGestionInventario.AddContainer("Bus de Mensajes", "Transporte de eventos del dominio.", "Event Sorcing");
+            
+            Container ConfiguracionContextDatabase = SistemaGestionInventario.AddContainer("Configuración Context DB", "", "MySQL");
+            Container stockContextDatabase = SistemaGestionInventario.AddContainer("Stock Context DB", "", "MySQL");
+            Container inventarioContextDatabase = SistemaGestionInventario.AddContainer("Inventario Context DB", "", "MySQL");
+            Container inventarioContextReplicaDatabase = SistemaGestionInventario.AddContainer("Inventario Context DB Replica", "", "MySQL");
+            Container ventasContextDatabase = SistemaGestionInventario.AddContainer("Ventas Context DB", "", "MySQL");
+            
+            //definiendo los usuarios
+            Person administrador = model.AddPerson("Administrador", "Administrador del sistema.");
+            Person cocinero = model.AddPerson("Cocinero", "Cocinero registra ingredientes");
+            Person cajero = model.AddPerson("Cajero", "Cajero registra venta y cobra");
+            
+            administrador.Uses(webApplication, "Realizar el monitoreo de inventario y ventas");
+            cocinero.Uses(webApplication, "Realizar el registro de ingredientes");
+            cajero.Uses(webApplication, "Realizar el registro de venta y cobro");
+
+            administrador.Uses(mobileApplication, "Realizar el monitoreo de inventario y ventas");
+            cocinero.Uses(mobileApplication, "Realizar el registro de ingredientes");
+            cajero.Uses(mobileApplication, "Realizar el registro de venta y cobro");
+            
+             // Tags
+            administrador.AddTags("Administrador");
+            cocinero.AddTags("Cocinero");
+            cajero.AddTags("Cajero");
+            
+            Styles styles = viewSet.Configuration.Styles;
+            styles.Add(new ElementStyle("Administrador") { Background = "#0a60ff", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Cocinero") { Background = "#08427b", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Cajero") { Background = "#FF33E0", Color = "#ffffff", Shape = Shape.Person });
+            styles.Add(new ElementStyle("Stock") { Background = "#facc2e", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Ventas") { Background = "#008f39", Color = "#ffffff", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Inventario") { Background = "#90714c", Color = "#ffffff", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("Configuracion") { Background = "#2f95c7", Color = "#ffffff", Shape = Shape.RoundedBox });
+            //definiendo los usuarios
+
+            administrador.Uses(webApplication, "Consulta");
+            administrador.Uses(mobileApplication, "Consulta");
+
+            cocinero.Uses(webApplication, "Consulta");
+            cocinero.Uses(mobileApplication, "Consulta");
+
+            cajero.Uses(webApplication, "Consulta");
+            cajero.Uses(mobileApplication, "Consulta");
+            
+            //cajero.Uses(mobileApplication, "Consulta");
+            //cajero.Uses(mobileApplication, "Registro");
+            //cajero.Uses(mobileApplication, "Edición");
+            
+         
             mobileApplication.Uses(apiGateway, "API Request", "JSON/HTTPS");
             webApplication.Uses(apiGateway, "API Request", "JSON/HTTPS");
-            developer.Uses(apiGateway, "API Request", "JSON/HTTPS");
-            apiGateway.Uses(flightPlanningContext, "API Request", "JSON/HTTPS");
-            apiGateway.Uses(airportContext, "API Request", "JSON/HTTPS");
-            apiGateway.Uses(aircraftInventoryContext, "API Request", "JSON/HTTPS");
-            apiGateway.Uses(vaccinesInventoryContext, "API Request", "JSON/HTTPS");
-            apiGateway.Uses(monitoringContext, "API Request", "JSON/HTTPS");
-            flightPlanningContext.Uses(messageBus, "Publica y consume eventos del dominio");
-            flightPlanningContext.Uses(flightPlanningContextDatabase, "", "JDBC");
-            airportContext.Uses(messageBus, "Publica y consume eventos del dominio");
-            airportContext.Uses(airportContextDatabase, "", "JDBC");
-            aircraftInventoryContext.Uses(messageBus, "Publica y consume eventos del dominio");
-            aircraftInventoryContext.Uses(aircraftInventoryContextDatabase, "", "JDBC");
-            vaccinesInventoryContext.Uses(messageBus, "Publica y consume eventos del dominio");
-            vaccinesInventoryContext.Uses(vaccinesInventoryContextDatabase, "", "JDBC");
-            monitoringContext.Uses(messageBus, "Publica y consume eventos del dominio");
-            monitoringContext.Uses(monitoringContextDatabase, "", "JDBC");
-            monitoringContext.Uses(monitoringContextReplicaDatabase, "", "JDBC");
-            monitoringContext.Uses(monitoringContextReactiveDatabase, "", "");
-            monitoringContextDatabase.Uses(monitoringContextReplicaDatabase, "Replica");
-            monitoringContext.Uses(googleMaps, "API Request", "JSON/HTTPS");
-            monitoringContext.Uses(aircraftSystem, "API Request", "JSON/HTTPS");
+            
+            apiGateway.Uses(configuracionContext, "API Request", "JSON/HTTPS");
+            apiGateway.Uses(stockContext, "API Request", "JSON/HTTPS");
+            apiGateway.Uses(inventarioContext, "API Request", "JSON/HTTPS");
+            apiGateway.Uses(ventasContext, "API Request", "JSON/HTTPS");
 
+            configuracionContext.Uses(messageBus, "Publica y consume eventos del dominio");
+            configuracionContext.Uses(ConfiguracionContextDatabase,"", "JDBC");
+
+            stockContext.Uses(messageBus, "Publica y consume eventos del dominio");
+            stockContext.Uses(stockContextDatabase, "", "JDBC");
+            
+            inventarioContext.Uses(messageBus, "Publica y consume eventos del dominio");
+            inventarioContext.Uses(inventarioContextDatabase, "JDBC");
+            inventarioContextDatabase.Uses(inventarioContextReplicaDatabase, "",  "JDBC");
+
+            ventasContext.Uses(messageBus, "Publica y consume eventos del dominio");
+            ventasContext.Uses(ventasContextDatabase, "", "JDBC");
+            
+           
             // Tags
             mobileApplication.AddTags("MobileApp");
             webApplication.AddTags("WebApp");
-            landingPage.AddTags("LandingPage");
             apiGateway.AddTags("APIGateway");
 
             string contextTag = "Context";
             string databaseTag = "Database";
 
-            flightPlanningContext.AddTags(contextTag);
-            flightPlanningContextDatabase.AddTags(databaseTag);
+            configuracionContext.AddTags(contextTag);
+            ConfiguracionContextDatabase.AddTags(databaseTag);
 
-            airportContext.AddTags(contextTag);
-            airportContextDatabase.AddTags(databaseTag);
+            stockContext.AddTags(contextTag);
+            stockContextDatabase.AddTags(databaseTag);
 
-            aircraftInventoryContext.AddTags(contextTag);
-            aircraftInventoryContextDatabase.AddTags(databaseTag);
+            inventarioContext.AddTags(contextTag);
+            inventarioContextDatabase.AddTags(databaseTag);
+            inventarioContextReplicaDatabase.AddTags(databaseTag);
 
-            vaccinesInventoryContext.AddTags(contextTag);
-            vaccinesInventoryContextDatabase.AddTags(databaseTag);
-
-            monitoringContext.AddTags(contextTag);
-            monitoringContextDatabase.AddTags(databaseTag);
-            monitoringContextReplicaDatabase.AddTags(databaseTag);
-            monitoringContextReactiveDatabase.AddTags(databaseTag);
+            ventasContext.AddTags(contextTag);
+            ventasContextDatabase.AddTags(databaseTag);
 
             messageBus.AddTags("MessageBus");
-            
             styles.Add(new ElementStyle("MobileApp") { Background = "#9d33d6", Color = "#ffffff", Shape = Shape.MobileDevicePortrait, Icon = "" });
             styles.Add(new ElementStyle("WebApp") { Background = "#9d33d6", Color = "#ffffff", Shape = Shape.WebBrowser, Icon = "" });
-            styles.Add(new ElementStyle("LandingPage") { Background = "#929000", Color = "#ffffff", Shape = Shape.WebBrowser, Icon = "" });
             styles.Add(new ElementStyle("APIGateway") { Shape = Shape.RoundedBox, Background = "#0000ff", Color = "#ffffff", Icon = "" });
             styles.Add(new ElementStyle(contextTag) { Shape = Shape.Hexagon, Background = "#facc2e", Icon = "" });
             styles.Add(new ElementStyle(databaseTag) { Shape = Shape.Cylinder, Background = "#ff0000", Color = "#ffffff", Icon = "" });
             styles.Add(new ElementStyle("MessageBus") { Width = 850, Background = "#fd8208", Color = "#ffffff", Shape = Shape.Pipe, Icon = "" });
             
-            ContainerView containerView = viewSet.CreateContainerView(monitoringSystem, "Contenedor", "Diagrama de contenedores");
-            contextView.PaperSize = PaperSize.A4_Landscape;
+            ContainerView containerView = viewSet.CreateContainerView(SistemaGestionInventario, "Contenedor", "Diagrama de contenedores");
+            containerView.PaperSize = PaperSize.A4_Landscape;
             containerView.AddAllElements();
+            
+            /*
 
             // 3. Diagrama de Componentes
             Component domainLayer = monitoringContext.AddComponent("Domain Layer", "", "Spring Boot");
@@ -195,6 +371,7 @@ namespace c4_model_microservices
             componentView.Add(aircraftSystem);
             componentView.Add(googleMaps);
             componentView.AddAllComponents();
+        */ 
 
             structurizrClient.UnlockWorkspace(workspaceId);
             structurizrClient.PutWorkspace(workspaceId, workspace);
