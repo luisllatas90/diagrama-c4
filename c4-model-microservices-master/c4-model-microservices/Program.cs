@@ -1,4 +1,4 @@
-﻿using Structurizr;
+﻿﻿using Structurizr;
 using Structurizr.Api;
 
 namespace c4_model_microservices
@@ -200,6 +200,7 @@ namespace c4_model_microservices
             /////////////////////////////
 
             // 2. Diagrama de Contenedores
+            /*
             SoftwareSystem SistemaGestionInventario = model.AddSoftwareSystem("Gestión Inventario", "Sistema de gestión de inventario.");
             
             //SoftwareSystem stock = model.AddSoftwareSystem("Stock", "Sistema que almacenar datos de stock por cada ingrediente.");
@@ -322,56 +323,101 @@ namespace c4_model_microservices
             ContainerView containerView = viewSet.CreateContainerView(SistemaGestionInventario, "Contenedor", "Diagrama de contenedores");
             containerView.PaperSize = PaperSize.A4_Landscape;
             containerView.AddAllElements();
+            */
+
+
+
+
+            /////////////////////////////
+            //DIAGRAMA DE COMPONENTES
+            /////////////////////////////
+            SoftwareSystem SistemaGestionInventario = model.AddSoftwareSystem("Gestión Inventario", "Sistema de gestión de inventario.");
             
-            /*
+            Container inventarioContext = SistemaGestionInventario.AddContainer("Inventario Context", "Bounded Context del Microservicio de Inventario de Ingredientes", "Spring Boot port 8083");
+            Container mobileApplication = SistemaGestionInventario.AddContainer("Mobile App", "Permite a los usuarios realizar las operaciones de gestión de inventario", "Android");
+            Container webApplication = SistemaGestionInventario.AddContainer("Web App", "Permite a los usuarios realizar las operaciones de gestión de inventario y venta", "React");
+            Container apiGateway = SistemaGestionInventario.AddContainer("API Gateway", "API Gateway", "Spring Boot port 8080");
+            Container inventarioContextDatabase = SistemaGestionInventario.AddContainer("Inventario Context DB", "", "MySQL");
+            Container inventarioContextReplicaDatabase = SistemaGestionInventario.AddContainer("Inventario Context DB Replica", "", "MySQL");
+            
+            //context - bd
+            Container messageBus = SistemaGestionInventario.AddContainer("Bus de Mensajes", "Transporte de eventos del dominio.", "Event Sorcing");
+            inventarioContext.Uses(messageBus, "Publica y consume eventos del dominio");
+            inventarioContext.Uses(inventarioContextDatabase, "JDBC");
+            inventarioContextDatabase.Uses(inventarioContextReplicaDatabase, "",  "JDBC");
+            
+            //Tags
+            string contextTag = "Context";
+            string databaseTag = "Database";
+            inventarioContextDatabase.AddTags(databaseTag);
+            inventarioContextReplicaDatabase.AddTags(databaseTag);
+
+            mobileApplication.Uses(apiGateway, "API Request", "JSON/HTTPS");
+            webApplication.Uses(apiGateway, "API Request", "JSON/HTTPS");
+             
+            
+            //Tags
+            mobileApplication.AddTags("MobileApp");
+            webApplication.AddTags("WebApp");
+            apiGateway.AddTags("APIGateway");
+            messageBus.AddTags("MessageBus");
+
+            Styles styles = viewSet.Configuration.Styles;
+            styles.Add(new ElementStyle("MobileApp") { Background = "#9d33d6", Color = "#ffffff", Shape = Shape.MobileDevicePortrait, Icon = "" });
+            styles.Add(new ElementStyle("WebApp") { Background = "#9d33d6", Color = "#ffffff", Shape = Shape.WebBrowser, Icon = "" });
+            styles.Add(new ElementStyle("APIGateway") { Shape = Shape.RoundedBox, Background = "#0000ff", Color = "#ffffff", Icon = "" });
+            styles.Add(new ElementStyle(contextTag) { Shape = Shape.Hexagon, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle(databaseTag) { Shape = Shape.Cylinder, Background = "#ff0000", Color = "#ffffff", Icon = "" });
+            styles.Add(new ElementStyle("MessageBus") { Width = 850, Background = "#fd8208", Color = "#ffffff", Shape = Shape.Pipe, Icon = "" });
+            
 
             // 3. Diagrama de Componentes
-            Component domainLayer = monitoringContext.AddComponent("Domain Layer", "", "Spring Boot");
-            Component monitoringController = monitoringContext.AddComponent("Monitoring Controller", "REST API endpoints de monitoreo.", "Spring Boot REST Controller");
-            Component monitoringApplicationService = monitoringContext.AddComponent("Monitoring Application Service", "Provee métodos para el monitoreo, pertenece a la capa Application de DDD", "Spring Component");
-            Component flightRepository = monitoringContext.AddComponent("Flight Repository", "Información del vuelo", "Spring Component");
-            Component vaccineLoteRepository = monitoringContext.AddComponent("VaccineLote Repository", "Información de lote de vacunas", "Spring Component");
-            Component locationRepository = monitoringContext.AddComponent("Location Repository", "Ubicación del vuelo", "Spring Component");
-            Component aircraftSystemFacade = monitoringContext.AddComponent("Aircraft System Facade", "", "Spring Component");
-
-            apiGateway.Uses(monitoringController, "", "JSON/HTTPS");
-            monitoringController.Uses(monitoringApplicationService, "Invoca métodos de monitoreo");
-            monitoringController.Uses(aircraftSystemFacade, "Usa");
-            monitoringApplicationService.Uses(domainLayer, "Usa", "");
-            monitoringApplicationService.Uses(flightRepository, "", "JDBC");
-            monitoringApplicationService.Uses(vaccineLoteRepository, "", "JDBC");
-            monitoringApplicationService.Uses(locationRepository, "", "JDBC");
-            flightRepository.Uses(monitoringContextDatabase, "", "JDBC");
-            vaccineLoteRepository.Uses(monitoringContextDatabase, "", "JDBC");
-            locationRepository.Uses(monitoringContextDatabase, "", "JDBC");
-            locationRepository.Uses(monitoringContextReactiveDatabase, "", "");
-            locationRepository.Uses(googleMaps, "", "JSON/HTTPS");
-            aircraftSystemFacade.Uses(aircraftSystem, "JSON/HTTPS");
+            Component domainLayer = inventarioContext.AddComponent("Domain Layer", "", "Spring Boot");
+            Component ingredienteController = inventarioContext.AddComponent("Ingrediente Controller", "REST API endpoints de ingrediente.", "Spring Boot REST Controller");
+            Component platoController = inventarioContext.AddComponent("Plato Controller", "REST API endpoints de plato.", "Spring Boot REST Controller");
+            Component ingredienteApplicationService = inventarioContext.AddComponent("Ingrediente Application Service", "Provee métodos para el registro/edición de ingredientes, pertenece a la capa Application de DDD", "Spring Component");
+            Component platosApplicationService = inventarioContext.AddComponent("Plato Application Service", "Provee métodos para el registro/edición de platos, pertenece a la capa Application de DDD", "Spring Component");
+            Component ingredienteRepository = inventarioContext.AddComponent("Ingrediente Repository", "Información de platos", "Spring Component");
+            Component platoRepository = inventarioContext.AddComponent("Plato Repository", "Información de ingredientes", "Spring Component");
+                        
+            apiGateway.Uses(platoController, "", "JSON/HTTPS");
+            apiGateway.Uses(ingredienteController, "", "JSON/HTTPS");
+            
+            ingredienteController.Uses(ingredienteApplicationService, "Invoca métodos para registro/edición de ingredientes");
+            platoController.Uses(platosApplicationService, "Invoca métodos para registro/edición de platos");
+            
+            ingredienteApplicationService.Uses(domainLayer, "Usa", "");
+            ingredienteApplicationService.Uses(ingredienteRepository, "", "JDBC");
+            
+            platosApplicationService.Uses(domainLayer, "Usa", "");
+            platosApplicationService.Uses(platoRepository, "", "JDBC");
+            
+            ingredienteRepository.Uses(inventarioContextDatabase, "", "JDBC");
+            ingredienteRepository.Uses(inventarioContextReplicaDatabase, "", "JDBC");
+            platoRepository.Uses(inventarioContextDatabase, "", "JDBC");
+            platoRepository.Uses(inventarioContextReplicaDatabase, "", "JDBC");
 
             // Tags
             string componentTag = "Component";
 
             domainLayer.AddTags(componentTag);
-            monitoringController.AddTags(componentTag);
-            monitoringApplicationService.AddTags(componentTag);
-            flightRepository.AddTags(componentTag);
-            vaccineLoteRepository.AddTags(componentTag);
-            locationRepository.AddTags(componentTag);
-            aircraftSystemFacade.AddTags(componentTag);
+            ingredienteController.AddTags(componentTag);
+            platoController.AddTags(componentTag);
+            ingredienteApplicationService.AddTags(componentTag);
+            platosApplicationService.AddTags(componentTag);
+            ingredienteRepository.AddTags(componentTag);
+            platoRepository.AddTags(componentTag);
             
             styles.Add(new ElementStyle(componentTag) { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
             
-            ComponentView componentView = viewSet.CreateComponentView(monitoringContext, "Components", "Component Diagram");
+            ComponentView componentView = viewSet.CreateComponentView(inventarioContext, "Components", "Component Diagram");
             componentView.PaperSize = PaperSize.A4_Landscape;
             componentView.Add(mobileApplication);
             componentView.Add(webApplication);
             componentView.Add(apiGateway);
-            componentView.Add(monitoringContextDatabase);
-            componentView.Add(monitoringContextReactiveDatabase);
-            componentView.Add(aircraftSystem);
-            componentView.Add(googleMaps);
+            componentView.Add(inventarioContextDatabase);
+            componentView.Add(inventarioContextReplicaDatabase);
             componentView.AddAllComponents();
-        */ 
 
             structurizrClient.UnlockWorkspace(workspaceId);
             structurizrClient.PutWorkspace(workspaceId, workspace);
